@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 import '/components/icon_card/icon_card_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -109,7 +111,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         child: IconCardWidget(
                           text: 'آلة الناي',
                           icon: FaIcon(
-                            FontAwesomeIcons.magic,
+                            FontAwesomeIcons.wandMagic,
                           ),
                         ),
                       ),
@@ -147,7 +149,56 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         child: IconCardWidget(
                           text: 'تيونر',
                           icon: FaIcon(
-                            FontAwesomeIcons.tachometerAlt,
+                            FontAwesomeIcons.gaugeHigh,
+                          ),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        showModalBottomSheet(
+                            context: context,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(16))),
+                            builder: (context) => Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    ListTile(
+                                      leading:
+                                          FaIcon(FontAwesomeIcons.facebook),
+                                      title: Text("Facebbok"),
+                                      onTap: () => _launchUrl(
+                                          "https://www.facebook.com/share/1AsNd8z8Th/"),
+                                    ),
+                                    ListTile(
+                                      leading:
+                                          FaIcon(FontAwesomeIcons.instagram),
+                                      title: Text("Instagram"),
+                                      onTap: () => _launchUrl(
+                                          "https://www.instagram.com/f_lamei"),
+                                    ),
+                                    ListTile(
+                                      leading:
+                                          FaIcon(FontAwesomeIcons.whatsapp),
+                                      title: Text("WhatsApp"),
+                                      onTap: () => _launchUrl(
+                                          "https://wa.me/201202754313"),
+                                    ),
+                                  ],
+                                ));
+                      },
+                      child: wrapWithModel(
+                        model: _model.iconCardModel3,
+                        updateCallback: () => safeSetState(() {}),
+                        child: IconCardWidget(
+                          text: 'الدعم الفني',
+                          icon: FaIcon(
+                            FontAwesomeIcons.headphones,
                           ),
                         ),
                       ),
@@ -160,5 +211,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         ),
       ),
     );
+  }
+}
+
+void _launchUrl(String url) async {
+  final uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 }

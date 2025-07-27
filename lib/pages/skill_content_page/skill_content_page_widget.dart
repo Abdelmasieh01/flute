@@ -1,3 +1,5 @@
+import 'package:flute/pages/audio_record_page/audio_record_page_widget.dart';
+
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -283,7 +285,15 @@ class _SkillContentPageWidgetState extends State<SkillContentPageWidget> {
                           ),
                           FFButtonWidget(
                             onPressed: () {
-                              print('Button pressed ...');
+                              context.pushNamed(
+                                AudioRecordPage.routeName,
+                                queryParameters: {
+                                  'index': serializeParam(
+                                    widget.index!,
+                                    ParamType.int,
+                                  )
+                                }.withoutNulls,
+                              );
                             },
                             text: 'عزف',
                             options: FFButtonOptions(

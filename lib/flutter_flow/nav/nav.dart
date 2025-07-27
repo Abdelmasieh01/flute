@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flute/pages/audio_record_page/audio_record_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -86,6 +87,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ParamType.int,
             ),
             type: params.getParam('type', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: AudioRecordPage.routeName,
+          path: AudioRecordPage.routePath,
+          builder: (context, params) => AudioRecordPage(
+            index: params.getParam(
+              'index',
+              ParamType.int,
+            ),
           ),
         ),
         FFRoute(

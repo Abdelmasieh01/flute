@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
@@ -17,6 +18,18 @@ void main() async {
 
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
+
+  final prefs = await SharedPreferences.getInstance();
+  final activated = prefs.getBool('activated') ?? false;
+
+  DateTime? expiryDate;
+  final expiryStr = prefs.getString("expiryDate");
+  if (expiryStr != null) {
+    expiryDate = DateTime.tryParse(expiryStr);
+  }
+
+  final appStateNotifier = AppStateNotifier.instance;
+  appStateNotifier.setActivated(activated, expiry: expiryDate);
 
   runApp(ChangeNotifierProvider(
     create: (context) => appState,

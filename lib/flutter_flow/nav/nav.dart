@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flute/pages/audio_record_page/audio_record_page_widget.dart';
+import 'package:flute/pages/lock_page/lock_page_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,20 @@ class AppStateNotifier extends ChangeNotifier {
 
   bool showSplashImage = true;
 
+  bool _isActivated = false;
+  DateTime? _expiryDate;
+
+  bool get isActivated => _isActivated;
+  DateTime? get expiryDate => _expiryDate;
+
+  void setActivated(bool value, { DateTime? expiry }) {
+    _isActivated = value;
+    if (expiry != null) {
+      _expiryDate = expiry;
+    }
+    notifyListeners();
+  }
+
   void stopShowingSplashImage() {
     showSplashImage = false;
     notifyListeners();
@@ -32,12 +47,17 @@ class AppStateNotifier extends ChangeNotifier {
 }
 
 GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
-      initialLocation: '/',
+      initialLocation: appStateNotifier.isActivated ? '/' : LockPage.routePath,
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) => HomePageWidget(),
       routes: [
+        FFRoute(
+          name: LockPage.routeName,
+          path: LockPage.routePath,
+          builder: (context, params) => LockPage(),
+        ),
         FFRoute(
           name: '_initialize',
           path: '/',
@@ -105,6 +125,32 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => TunerPageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
+      redirect: (context, state) {
+        final currentPath = state.uri.path;
+        final activated = appStateNotifier.isActivated;
+        final expiryDate =
+            appStateNotifier.expiryDate; // store as DateTime in notifier
+
+        // Check if expired
+        final now = DateTime.now();
+        final isExpired = expiryDate != null && now.isAfter(expiryDate);
+
+        // If expired, deactivate
+        if (isExpired && activated) {
+          appStateNotifier.setActivated(false);
+        }
+
+        // Redirects
+        if ((!activated || isExpired) && currentPath != LockPage.routePath) {
+          return LockPage.routePath;
+        }
+
+        if (activated && !isExpired && currentPath == LockPage.routePath) {
+          return '/';
+        }
+
+        return null;
+      },
       observers: [routeObserver],
     );
 

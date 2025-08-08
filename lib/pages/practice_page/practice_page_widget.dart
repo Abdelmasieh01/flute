@@ -98,8 +98,6 @@ class _PracticePageWidgetState extends State<PracticePageWidget> {
                     exercises = FFAppState().skills.elementAtOrNull(widget.index)?.examples ?? [];
                   }
 
-                  print(exercises);
-
                   return Container(
                     width: double.infinity,
                     height: 200.0,

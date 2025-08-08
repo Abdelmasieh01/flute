@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:whatsapp_share2/whatsapp_share2.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AudioRecordPage extends StatefulWidget {
   const AudioRecordPage({super.key, required this.index});
@@ -89,14 +89,15 @@ Future<void> _startRecording() async {
     );
   }
 
-  Future<void> _shareOnWhatsApp() async {
+  Future<void> _shareFile() async {
     if (!_isSaved || _filePath == null) return;
-    await WhatsappShare.shareFile(
-      filePath: [_filePath!],
-      text:
+    final params = ShareParams(
+      text: 
           'تسجيل لتمرين: ${FFAppState().skills.elementAt(widget.index).name}',
-      phone: '201202754313',
+      files: [XFile(_filePath!)]
     );
+
+    await SharePlus.instance.share(params);
   }
 
   @override
@@ -151,8 +152,8 @@ Future<void> _startRecording() async {
                   const SizedBox(height: 16),
                   _buildButton(
                     icon: Icons.share,
-                    label: 'مشاركة عبر WhatsApp',
-                    onPressed: _isSaved ? _shareOnWhatsApp : null,
+                    label: 'مشاركة الملف',
+                    onPressed: _isSaved ? _shareFile : null,
                     color: Colors.green,
                   ),
                 ],

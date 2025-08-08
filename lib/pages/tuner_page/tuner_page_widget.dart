@@ -1,3 +1,5 @@
+import 'package:flutter/services.dart';
+
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -39,8 +41,15 @@ class _TunerPageWidgetState extends State<TunerPageWidget> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     _model.dispose();
+
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
 
     super.dispose();
   }

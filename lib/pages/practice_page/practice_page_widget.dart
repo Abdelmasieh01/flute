@@ -1,4 +1,5 @@
 import 'package:flute/backend/schema/structs/index.dart';
+import 'package:flutter/services.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -48,8 +49,17 @@ class _PracticePageWidgetState extends State<PracticePageWidget> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     _model.dispose();
+    super.dispose();
+
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
 
     super.dispose();
   }
@@ -87,6 +97,8 @@ class _PracticePageWidgetState extends State<PracticePageWidget> {
                   } else {
                     exercises = FFAppState().skills.elementAtOrNull(widget.index)?.examples ?? [];
                   }
+
+                  print(exercises);
 
                   return Container(
                     width: double.infinity,

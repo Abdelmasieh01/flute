@@ -72,144 +72,82 @@ class _OverviewContentPageWidgetState extends State<OverviewContentPageWidget> {
                 decoration: BoxDecoration(),
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    primary: false,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .backgroundTransparent,
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              valueOrDefault<String>(
-                                FFAppState()
-                                    .fluteOverviewLessons
-                                    .elementAtOrNull(widget.index!)
-                                    ?.title,
-                                'Title',
-                              ),
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .headlineLarge
-                                  .override(
-                                    font: GoogleFonts.interTight(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .headlineLarge
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .headlineLarge
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .headlineLarge
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .headlineLarge
-                                        .fontStyle,
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Builder(
-                          builder: (context) {
-                            final contentList = FFAppState()
-                                    .fluteOverviewLessons
-                                    .elementAtOrNull(widget.index!)
-                                    ?.contents
-                                    .toList() ??
-                                [];
+                  child: Builder(
+                    builder: (context) {
+                      final contentList = FFAppState()
+                              .fluteOverviewLessons
+                              .elementAtOrNull(widget.index!)
+                              ?.contents
+                              .toList() ??
+                          [];
 
-                            return ListView.separated(
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemCount: contentList.length,
-                              separatorBuilder: (_, __) =>
-                                  SizedBox(height: 12.0),
-                              itemBuilder: (context, contentListIndex) {
-                                final contentListItem =
-                                    contentList[contentListIndex];
-                                return Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .backgroundTransparent,
-                                    borderRadius: BorderRadius.circular(8.0),
+                      return ListView.separated(
+                        padding: EdgeInsets.zero,
+                        itemCount:
+                            contentList.length + 1, // +1 for the title at top
+                        separatorBuilder: (_, __) => SizedBox(height: 16.0),
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .backgroundTransparent,
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  valueOrDefault<String>(
+                                    FFAppState()
+                                        .fluteOverviewLessons
+                                        .elementAtOrNull(widget.index!)
+                                        ?.title,
+                                    'Title',
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(12.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          contentListItem.title,
-                                          style: FlutterFlowTheme.of(context)
-                                              .headlineSmall
-                                              .override(
-                                                font: GoogleFonts.interTight(
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .headlineSmall
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .headlineSmall
-                                                          .fontStyle,
-                                                ),
-                                                letterSpacing: 0.0,
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
-                                                        .headlineSmall
-                                                        .fontWeight,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .headlineSmall
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                        Text(
-                                          contentListItem.content,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                font: GoogleFonts.inter(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMedium
-                                                          .fontStyle,
-                                                ),
-                                                fontSize: 16.0,
-                                                letterSpacing: 0.0,
-                                                fontWeight: FontWeight.w500,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                        ),
-                                      ].divide(SizedBox(height: 8.0)),
-                                    ),
-                                  ),
-                                );
-                              },
+                                  textAlign: TextAlign.center,
+                                  style: FlutterFlowTheme.of(context)
+                                      .headlineLarge,
+                                ),
+                              ),
                             );
-                          },
-                        ),
-                      ].divide(SizedBox(height: 16.0)),
-                    ),
+                          }
+
+                          final content = contentList[index - 1];
+                          return Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .backgroundTransparent,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    content.title,
+                                    style: FlutterFlowTheme.of(context)
+                                        .headlineSmall,
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    content.content,
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16.0,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
               ),
